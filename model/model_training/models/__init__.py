@@ -43,7 +43,5 @@ def get_specific_model(
         else:
             if "falcon" in model_name:
                 kwargs["trust_remote_code"] = True
-            if "llama" in model_name:
-                kwargs["token"] = "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"
             model = transformers.AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, **kwargs)
     return model
