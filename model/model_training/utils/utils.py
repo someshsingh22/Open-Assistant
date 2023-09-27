@@ -212,7 +212,10 @@ def get_tokenizer(conf) -> transformers.AutoTokenizer:
         # Only 13B has a tokenizer available on HF
         tokenizer_name = "cerebras/Cerebras-GPT-13B"
 
-    tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer_name, cache_dir=conf.cache_dir)
+    if "llama" in conf.model_name:
+        tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer_name, cache_dir=conf.cache_dir, token="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")
+    else:
+        tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer_name, cache_dir=conf.cache_dir)
 
     tokenizer_config = match_tokenizer_name(conf.model_name)
 
