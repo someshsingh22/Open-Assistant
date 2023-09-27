@@ -929,7 +929,7 @@ llama2_7b_sft:
   log_dir: "/mnt/localssd/llama2_log_7b_sft"
   output_dir: /mnt/localssd/llama2_log_7b_sft
   learning_rate: 1e-5
-  model_name: meta-llama/Llama-2-7b-chat-hf
+  model_name: "meta-llama/Llama-2-7b-chat-hf"
   deepspeed_config: configs/zero3_config_sft.json
   weight_decay: 1e-6
   max_length: 2048
