@@ -479,7 +479,7 @@ def main():
     trainer.train(resume_from_checkpoint=training_conf.resume_from_checkpoint)
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
-    upload(0, output_dir)
+    upload(0, output_dir, training_conf.project_name)
 
 if __name__ == "__main__":
     main()
