@@ -453,7 +453,7 @@ def main():
 
         wandb_name = training_conf.model_name.replace(os.getenv("HOME", "/home/ubuntu"), "")
         wandb.init(
-            project=os.getenv("PROJECT_NAME", "sft"),
+            project=training_conf.project_name,
             entity=training_conf.wandb_entity,
             resume=training_conf.resume_from_checkpoint,
             name=f"{wandb_name}-{training_conf.log_dir}-finetuned",

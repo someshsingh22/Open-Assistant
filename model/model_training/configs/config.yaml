@@ -921,6 +921,7 @@ llama2_13b_orcacode2_8k:
   #   evol_instruct_code:        455
 
 llama2_7b_sft:
+  project_name: TEST
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true
