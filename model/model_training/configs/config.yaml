@@ -946,4 +946,7 @@ llama2_7b_sft:
   num_train_epochs: 1
   save_total_limit: 3
   datasets:
-    - webgpt
+    - samsum:
+      num_samples: 100
+      val_split: 0.1
+      max_val_set: 10
