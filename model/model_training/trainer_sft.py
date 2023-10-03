@@ -315,7 +315,7 @@ def main():
         adam_beta1=training_conf.adam_beta1,
         adam_beta2=training_conf.adam_beta2,
         adam_epsilon=float(training_conf.adam_epsilon),
-        weight_decay=training_conf.weight_decay,
+        weight_decay=float(training_conf.weight_decay),
         max_grad_norm=training_conf.max_grad_norm,
         logging_steps=training_conf.logging_steps,
         save_total_limit=training_conf.save_total_limit,
