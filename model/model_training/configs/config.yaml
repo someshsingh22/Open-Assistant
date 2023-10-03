@@ -925,7 +925,7 @@ llama2_7b_sft:
   random_offset_probability: 0.0
   use_custom_sampler: true
   sort_by_length: false
-  dtype: fp16
+  dtype: bf16
   log_dir: "/mnt/localssd/llama2_log_7b_sft"
   output_dir: /mnt/localssd/llama2_log_7b_sft
   learning_rate: 1e-5
