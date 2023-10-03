@@ -610,8 +610,7 @@ class lcm(Dataset):
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,
-                questions=["What percentage of users will click on this email?"],
-                context=row['context'],
+                questions=[row['context']+' '+"What percentage of users will click on this email?"],
                 answers=[str(float(row['click'])*100)[:3]]
             )
             for _, row in data.iterrows()
