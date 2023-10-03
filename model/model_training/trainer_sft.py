@@ -32,7 +32,10 @@ from transformers.trainer_pt_utils import IterableDatasetShard
 from transformers.trainer_utils import seed_worker
 from transformers.training_args import OptimizerNames
 from transformers.utils import is_datasets_available
+from huggingface_hub import login
 
+assert os.getenv("HF_TOKEN"), "Please set your HF_TOKEN environment variable to your HuggingFace API token"
+login(token = os.getenv("HF_TOKEN"))
 
 def compute_metrics(eval_pred, preprocess_fns, metrics):
     out = {}
