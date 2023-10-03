@@ -607,7 +607,7 @@ class lcm(Dataset):
         self.mode = mode
         data = pd.read_csv('train.csv')
         data = data[data['click']<0.25]
-        self.rows = [
+        rows = [
             create_dataset_entry_qa(
                 mode=self.mode,
                 questions=[row['context']+' '+"What percentage of users will click on this email?"],
@@ -615,6 +615,11 @@ class lcm(Dataset):
             )
             for _, row in data.iterrows()
         ]
+        train_rows = rows[:100000]
+        val_rows = rows[110000:]
+        random.shuffle(train_rows)
+        random.shuffle(val_rows)
+        self.rows = train_rows + val_rows
     def __len__(self):
         return len(self.rows)
     
