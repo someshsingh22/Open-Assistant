@@ -33,6 +33,7 @@ from transformers.trainer_utils import seed_worker
 from transformers.training_args import OptimizerNames
 from transformers.utils import is_datasets_available
 from huggingface_hub import login
+from upload_to_s3 import upload
 
 assert os.getenv("HF_TOKEN"), "Please set your HF_TOKEN environment variable to your HuggingFace API token"
 login(token = os.getenv("HF_TOKEN"))
@@ -452,7 +453,7 @@ def main():
 
         wandb_name = training_conf.model_name.replace(os.getenv("HOME", "/home/ubuntu"), "")
         wandb.init(
-            project="supervised-finetuning",
+            project=os.getenv("PROJECT_NAME", "sft"),
             entity=training_conf.wandb_entity,
             resume=training_conf.resume_from_checkpoint,
             name=f"{wandb_name}-{training_conf.log_dir}-finetuned",
@@ -478,7 +479,7 @@ def main():
     trainer.train(resume_from_checkpoint=training_conf.resume_from_checkpoint)
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
-
+    upload(0, output_dir)
 
 if __name__ == "__main__":
     main()
