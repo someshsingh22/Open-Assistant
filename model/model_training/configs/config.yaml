@@ -948,4 +948,6 @@ llama2_13b_lcm:
   num_train_epochs: 1
   save_total_limit: 3
   datasets:
-    - lcm
+    - lcm:
+        max_val_set: 5000
+
