@@ -28,6 +28,7 @@ from model_training.custom_datasets.qa_datasets import (
     WebGPT,
     WizardEvolInstructV2,
     load_alpaca_dataset,
+    lcm,
 )
 from model_training.custom_datasets.rank_datasets import AugmentedOA
 from model_training.custom_datasets.summarization import HFSummary, HFSummaryPairs, SummarizationDataset
@@ -190,6 +191,9 @@ def get_one_dataset(
         dataset = DolphinMix(cache_dir=data_path, **kwargs)
     elif dataset_name in RAG_DATASETS.keys():
         dataset = RAGDataset(dataset_name, cache_dir=data_path, **kwargs)
+    elif dataset_name == "lcm":
+        dataset = lcm(cache_dir=data_path, **kwargs)
+        train, eval = dataset[:100000], dataset[110000:]
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
 

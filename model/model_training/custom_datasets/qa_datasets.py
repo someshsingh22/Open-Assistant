@@ -10,6 +10,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 from urllib.request import urlopen
+import pandas as pd
 
 import numpy as np
 import requests
@@ -227,8 +228,7 @@ class WebGPT(Dataset):
     def __getitem__(self, index) -> DatasetEntry:
         dialogue = self.rows[index]
         return dialogue
-
-
+    
 class SODA(Dataset):
     name = "soda"
 
@@ -599,6 +599,28 @@ class DatabricksDolly15k(Dataset):
         dialogue = self.rows[index]
         return dialogue
 
+
+class lcm(Dataset):
+    def __init__(self, cache_dir, mode="sft"):
+        super().__init__()
+        self.rows = []
+        self.mode = mode
+        data = pd.read_csv('train.csv')
+        data = data[data['click']<0.25]
+        self.rows = [
+            create_dataset_entry_qa(
+                mode=self.mode,
+                questions=["What percentage of users will click on this email?"],
+                context=row['context'],
+                answers=[str(float(row['click'])*100)[:3]]
+            )
+            for _, row in data.iterrows()
+        ]
+    def __len__(self):
+        return len(self.rows)
+    
+    def __getitem__(self, index):
+        return self.rows[index]
 
 class Dolly15kMultilingual(Dataset):
     def __init__(self, cache_dir: str | Path, mode: str = "sft") -> None:
