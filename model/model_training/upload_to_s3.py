@@ -21,9 +21,14 @@ def upload(upload_type, path, project_name, run_name):
                 transfer.upload_file(
                     os.path.join(root, file),
                     s3_info["AWS_BUCKET"],
-                    s3_info["AWS_BUCKET_FOLDER"] + "/" + os.path.join(root, file),
+                    s3_info["AWS_BUCKET_FOLDER"] + "/" + str(os.path.join(root, file)).replace(path, ""),
                 )
-                print("Uploaded: ", os.path.join(root, file), "to", s3_info["AWS_BUCKET_FOLDER"]+ "/" + os.path.join(root, file))
+                print(
+                    "Uploaded: ",
+                    os.path.join(root, file),
+                    "to",
+                    s3_info["AWS_BUCKET_FOLDER"] + "/" + str(os.path.join(root, file)).replace(path, ""),
+                )
     else:
         s3_flname = path.split(os.sep)[-1]
         print(s3_flname)
