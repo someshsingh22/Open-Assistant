@@ -7,6 +7,7 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 import datasets
 import torch
+from huggingface_hub import login
 
 # from model_training.custom_datasets.formatting import DatasetEntry
 from model_training.custom_datasets.dialogue_collator import DialogueDataCollator
@@ -32,6 +33,10 @@ from transformers.trainer_pt_utils import IterableDatasetShard
 from transformers.trainer_utils import seed_worker
 from transformers.training_args import OptimizerNames
 from transformers.utils import is_datasets_available
+from upload_to_s3 import upload
+
+assert os.getenv("HF_TOKEN"), "Please set your HF_TOKEN environment variable to your HuggingFace API token"
+login(token=os.getenv("HF_TOKEN"))
 
 
 def compute_metrics(eval_pred, preprocess_fns, metrics):
@@ -312,7 +317,7 @@ def main():
         adam_beta1=training_conf.adam_beta1,
         adam_beta2=training_conf.adam_beta2,
         adam_epsilon=float(training_conf.adam_epsilon),
-        weight_decay=training_conf.weight_decay,
+        weight_decay=float(training_conf.weight_decay),
         max_grad_norm=training_conf.max_grad_norm,
         logging_steps=training_conf.logging_steps,
         save_total_limit=training_conf.save_total_limit,
@@ -449,7 +454,7 @@ def main():
 
         wandb_name = training_conf.model_name.replace(os.getenv("HOME", "/home/ubuntu"), "")
         wandb.init(
-            project="supervised-finetuning",
+            project=training_conf.project_name,
             entity=training_conf.wandb_entity,
             resume=training_conf.resume_from_checkpoint,
             name=f"{wandb_name}-{training_conf.log_dir}-finetuned",
@@ -473,9 +478,15 @@ def main():
         preprocess_logits_for_metrics=preprocess_logits_for_metrics,
     )
     trainer.train(resume_from_checkpoint=training_conf.resume_from_checkpoint)
+    print("Finished training")
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
-
+    sensei_path = f'/sensei-fs/users/someshs/{training_conf.project_name}/{training_conf.run_name}/'
+    trainer.save_model(sensei_path)
+    tokenizer.save_pretrained(sensei_path)
+    if not training_conf.deepspeed or training_conf.local_rank == 0:
+        upload(0, output_dir, training_conf.project_name, training_conf.run_name)
+    print("Uploaded model to S3")
 
 if __name__ == "__main__":
     main()
