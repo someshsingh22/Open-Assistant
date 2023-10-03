@@ -939,8 +939,8 @@ llama2_7b_sft:
   use_flash_attention: true
   gradient_checkpointing: true
   gradient_accumulation_steps: 1
-  per_device_train_batch_size: 16
-  per_device_eval_batch_size: 16
+  per_device_train_batch_size: 32
+  per_device_eval_batch_size: 32
   residual_dropout: 0.2
   eval_steps: 15
   save_steps: 30
