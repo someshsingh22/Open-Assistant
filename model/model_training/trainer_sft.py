@@ -478,11 +478,13 @@ def main():
         preprocess_logits_for_metrics=preprocess_logits_for_metrics,
     )
     trainer.train(resume_from_checkpoint=training_conf.resume_from_checkpoint)
+    print("Finished training")
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
+    print("Saved model and tokenizer")
     if not training_conf.deepspeed or training_conf.local_rank == 0:
         upload(0, output_dir, training_conf.project_name)
-
+    print("Uploaded model to S3")
 
 if __name__ == "__main__":
     main()

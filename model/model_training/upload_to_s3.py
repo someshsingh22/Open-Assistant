@@ -14,8 +14,10 @@ def upload(upload_type, path, project_name):
         "s3", aws_access_key_id=s3_info["AWS_ACCESS_KEY_ID"], aws_secret_access_key=s3_info["AWS_SECRET_ACCESS_KEY"]
     )
     transfer = boto3.s3.transfer.S3Transfer(s3_client)
+    print("Uploading to S3")
     if upload_type == 0:
         for root, dirs, files in os.walk(path):
+            print(f"Uploading {str(dirs)} to S3")
             for file in files:
                 transfer.upload_file(
                     os.path.join(root, file),
