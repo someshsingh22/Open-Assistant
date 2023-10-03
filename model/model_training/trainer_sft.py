@@ -7,6 +7,7 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 import datasets
 import torch
+from huggingface_hub import login
 
 # from model_training.custom_datasets.formatting import DatasetEntry
 from model_training.custom_datasets.dialogue_collator import DialogueDataCollator
@@ -32,11 +33,11 @@ from transformers.trainer_pt_utils import IterableDatasetShard
 from transformers.trainer_utils import seed_worker
 from transformers.training_args import OptimizerNames
 from transformers.utils import is_datasets_available
-from huggingface_hub import login
 from upload_to_s3 import upload
 
 assert os.getenv("HF_TOKEN"), "Please set your HF_TOKEN environment variable to your HuggingFace API token"
-login(token = os.getenv("HF_TOKEN"))
+login(token=os.getenv("HF_TOKEN"))
+
 
 def compute_metrics(eval_pred, preprocess_fns, metrics):
     out = {}
@@ -480,6 +481,7 @@ def main():
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
     upload(0, output_dir, training_conf.project_name)
+
 
 if __name__ == "__main__":
     main()
