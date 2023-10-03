@@ -922,6 +922,7 @@ llama2_13b_orcacode2_8k:
 
 llama2_7b_sft:
   project_name: TEST
+  run_name: TEST
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true

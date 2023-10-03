@@ -483,7 +483,7 @@ def main():
     tokenizer.save_pretrained(output_dir)
     print("Saved model and tokenizer")
     if not training_conf.deepspeed or training_conf.local_rank == 0:
-        upload(0, output_dir, training_conf.project_name)
+        upload(0, output_dir, training_conf.project_name, training_conf.run_name)
     print("Uploaded model to S3")
 
 if __name__ == "__main__":

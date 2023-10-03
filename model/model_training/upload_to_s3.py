@@ -3,12 +3,12 @@ import os
 import boto3
 
 
-def upload(upload_type, path, project_name):
+def upload(upload_type, path, project_name, run_name):
     s3_info = {
         "AWS_ACCESS_KEY_ID": os.getenv("AWS_ACCESS_KEY_ID"),
         "AWS_SECRET_ACCESS_KEY": os.getenv("AWS_SECRET_ACCESS_KEY"),
         "AWS_BUCKET": "crawldatafromgcp",
-        "AWS_BUCKET_FOLDER": f"somesh/{project_name}",
+        "AWS_BUCKET_FOLDER": f"somesh/{project_name}/{run_name}",
     }
     s3_client = boto3.client(
         "s3", aws_access_key_id=s3_info["AWS_ACCESS_KEY_ID"], aws_secret_access_key=s3_info["AWS_SECRET_ACCESS_KEY"]
@@ -17,13 +17,13 @@ def upload(upload_type, path, project_name):
     print("Uploading to S3")
     if upload_type == 0:
         for root, dirs, files in os.walk(path):
-            print(f"Uploading {str(dirs)} to S3")
             for file in files:
                 transfer.upload_file(
                     os.path.join(root, file),
                     s3_info["AWS_BUCKET"],
                     s3_info["AWS_BUCKET_FOLDER"] + "/" + os.path.join(root, file),
                 )
+                print("Uploaded: ", os.path.join(root, file), "to", s3_info["AWS_BUCKET_FOLDER"]+ "/" + os.path.join(root, file))
     else:
         s3_flname = path.split(os.sep)[-1]
         print(s3_flname)
