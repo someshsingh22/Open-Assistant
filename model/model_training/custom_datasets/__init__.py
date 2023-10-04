@@ -1,6 +1,7 @@
 """
     High level functions for model training
 """
+import random
 from typing import Optional
 
 import numpy as np
@@ -27,8 +28,8 @@ from model_training.custom_datasets.qa_datasets import (
     Vicuna,
     WebGPT,
     WizardEvolInstructV2,
-    load_alpaca_dataset,
     lcm,
+    load_alpaca_dataset,
 )
 from model_training.custom_datasets.rank_datasets import AugmentedOA
 from model_training.custom_datasets.summarization import HFSummary, HFSummaryPairs, SummarizationDataset
@@ -194,7 +195,7 @@ def get_one_dataset(
     elif dataset_name == "lcm":
         dataset = lcm(cache_dir=data_path, **kwargs)
         train, eval = dataset[:100000], dataset[110000:]
-        train = train.shuffle()
+        random.shuffle(train)
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
 
