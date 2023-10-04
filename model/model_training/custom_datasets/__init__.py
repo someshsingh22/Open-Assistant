@@ -194,6 +194,7 @@ def get_one_dataset(
     elif dataset_name == "lcm":
         dataset = lcm(cache_dir=data_path, **kwargs)
         train, eval = dataset[:100000], dataset[110000:]
+        train = train.shuffle()
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
 
