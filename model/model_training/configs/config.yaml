@@ -934,17 +934,17 @@ llama2_13b_lcm:
   model_name: meta-llama/Llama-2-13b-chat-hf
   deepspeed_config: configs/zero3_config_sft.json
   weight_decay: 1e-6
-  max_length: 1400
+  max_length: 1300
   warmup_steps: 10
   peft_model: false
   use_flash_attention: true
   gradient_checkpointing: true
   gradient_accumulation_steps: 1
-  per_device_train_batch_size: 125
-  per_device_eval_batch_size: 125
+  per_device_train_batch_size: 25
+  per_device_eval_batch_size: 25
   residual_dropout: 0.2
-  eval_steps: 10
-  save_steps: 30
+  eval_steps: 50
+  save_steps: 150
   num_train_epochs: 1
   save_total_limit: 3
   logging_steps: 1
