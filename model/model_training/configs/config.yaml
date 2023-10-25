@@ -920,32 +920,36 @@ llama2_13b_orcacode2_8k:
   #   megacode:                 1000
   #   evol_instruct_code:        455
 
-llama2_7b_sft:
-  project_name: TEST
-  run_name: TEST
+llama2_13b_lcm:
+  project_name: LCM
+  run_name: average_ctr_w_aggregate
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true
   sort_by_length: false
   dtype: bf16
-  log_dir: "/mnt/localssd/llama2_log_7b_sft"
-  output_dir: /mnt/localssd/llama2_log_7b_sft
-  learning_rate: 1e-5
-  model_name: meta-llama/Llama-2-7b-chat-hf
+  log_dir: "/mnt/localssd/llama2_log_13b_sft"
+  output_dir: /mnt/localssd/llama2_log_13b_sft
+  learning_rate: 5e-5
+  model_name: meta-llama/Llama-2-13b-chat-hf
   deepspeed_config: configs/zero3_config_sft.json
   weight_decay: 1e-6
-  max_length: 1500
-  warmup_steps: 100
+  max_length: 1300
+  warmup_steps: 10
   peft_model: false
   use_flash_attention: true
   gradient_checkpointing: true
   gradient_accumulation_steps: 1
-  per_device_train_batch_size: 60
-  per_device_eval_batch_size: 60
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 16
   residual_dropout: 0.2
   eval_steps: 30
-  save_steps: 30
+  save_steps: 200
   num_train_epochs: 1
   save_total_limit: 3
+  logging_steps: 10
   datasets:
-    - samsum
+    - lcm_pure
+    - lcm_agg:
+        max_val_set: 1000
+

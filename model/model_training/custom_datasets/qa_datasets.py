@@ -12,6 +12,7 @@ from typing import Any
 from urllib.request import urlopen
 
 import numpy as np
+import pandas as pd
 import requests
 from datasets import load_dataset
 from model_training.custom_datasets.formatting import DatasetEntry, create_dataset_entry_qa
@@ -598,6 +599,61 @@ class DatabricksDolly15k(Dataset):
     def __getitem__(self, index: int) -> DatasetEntry:
         dialogue = self.rows[index]
         return dialogue
+
+
+class lcm_agg(Dataset):
+    def __init__(self, cache_dir, mode="sft"):
+        super().__init__()
+        self.rows = []
+        self.mode = mode
+        data = pd.read_parquet("agg_lcm_data_v2.parquet")
+        self.rows = [
+            create_dataset_entry_qa(
+                mode=self.mode,
+                questions=[row["question"]],
+                answers=[row["kpi"]],
+            )
+            for _, row in data.iterrows()
+        ]
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, index):
+        return self.rows[index]
+    
+class lcm_pure(Dataset):
+    def __init__(self, cache_dir, mode="sft", train=True):
+        super().__init__()
+        self.rows = []
+        self.mode = mode
+        data = pd.read_parquet("pure_lcm_data_v2.parquet")
+        if train:
+            self.rows = [
+                create_dataset_entry_qa(
+                    mode=self.mode,
+                    questions=[row["question"]],
+                    answers=[row["kpi"]],
+                )
+                for _, row in data.iterrows()
+                if row["split"] == "TRAIN"
+            ]
+        else:
+            self.rows = [
+                create_dataset_entry_qa(
+                    mode=self.mode,
+                    questions=[row["question"]],
+                    answers=[row["kpi"]],
+                )
+                for _, row in data.iterrows()
+                if row["split"] != "TRAIN"
+            ]
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, index):
+        return self.rows[index]
 
 
 class Dolly15kMultilingual(Dataset):

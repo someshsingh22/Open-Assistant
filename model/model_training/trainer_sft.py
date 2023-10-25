@@ -481,12 +481,13 @@ def main():
     print("Finished training")
     trainer.save_model()
     tokenizer.save_pretrained(output_dir)
-    sensei_path = f'/sensei-fs/users/someshs/{training_conf.project_name}/{training_conf.run_name}/'
+    sensei_path = f"/sensei-fs/users/someshs/{training_conf.project_name}/{training_conf.run_name}/"
     trainer.save_model(sensei_path)
     tokenizer.save_pretrained(sensei_path)
     if not training_conf.deepspeed or training_conf.local_rank == 0:
         upload(0, output_dir, training_conf.project_name, training_conf.run_name)
     print("Uploaded model to S3")
+
 
 if __name__ == "__main__":
     main()
