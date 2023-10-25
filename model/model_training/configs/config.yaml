@@ -930,7 +930,7 @@ llama2_13b_lcm:
   dtype: bf16
   log_dir: "/mnt/localssd/llama2_log_13b_sft"
   output_dir: /mnt/localssd/llama2_log_13b_sft
-  learning_rate: 5e-5
+  learning_rate: 3e-4
   model_name: meta-llama/Llama-2-13b-chat-hf
   deepspeed_config: configs/zero3_config_sft.json
   weight_decay: 1e-6
