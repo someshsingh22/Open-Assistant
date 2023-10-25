@@ -922,7 +922,7 @@ llama2_13b_orcacode2_8k:
 
 llama2_13b_lcm:
   project_name: LCM
-  run_name: average_ctr_no_aggregate
+  run_name: average_ctr_w_aggregate
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true
@@ -949,6 +949,7 @@ llama2_13b_lcm:
   save_total_limit: 3
   logging_steps: 10
   datasets:
-    - lcm:
-        max_val_set: 5000
+    - lcm_pure
+    - lcm_agg:
+        max_val_set: 1000
 
