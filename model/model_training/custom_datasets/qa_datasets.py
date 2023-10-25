@@ -601,21 +601,53 @@ class DatabricksDolly15k(Dataset):
         return dialogue
 
 
-class lcm(Dataset):
+class lcm_agg(Dataset):
     def __init__(self, cache_dir, mode="sft"):
         super().__init__()
         self.rows = []
         self.mode = mode
-        data = pd.read_csv("train.csv")
-        data = data[data["click"] < 0.25]
+        data = pd.read_parquet("agg_lcm_data_v2.parquet")
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,
-                questions=[row["context"] + " " + "What percentage of users will click on this email?"],
-                answers=[str(float(row["click"]) * 100)[:3]],
+                questions=[row["question"]],
+                answers=[row["kpi"]],
             )
             for _, row in data.iterrows()
         ]
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, index):
+        return self.rows[index]
+    
+class lcm_pure(Dataset):
+    def __init__(self, cache_dir, mode="sft", train=True):
+        super().__init__()
+        self.rows = []
+        self.mode = mode
+        data = pd.read_parquet("pure_lcm_data_v2.parquet")
+        if train:
+            self.rows = [
+                create_dataset_entry_qa(
+                    mode=self.mode,
+                    questions=[row["question"]],
+                    answers=[row["kpi"]],
+                )
+                for _, row in data.iterrows()
+                if row["split"] == "TRAIN"
+            ]
+        else:
+            self.rows = [
+                create_dataset_entry_qa(
+                    mode=self.mode,
+                    questions=[row["question"]],
+                    answers=[row["kpi"]],
+                )
+                for _, row in data.iterrows()
+                if row["split"] != "TRAIN"
+            ]
 
     def __len__(self):
         return len(self.rows)
