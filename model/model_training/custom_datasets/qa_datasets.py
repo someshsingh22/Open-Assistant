@@ -636,7 +636,7 @@ class lcm_pure(Dataset):
                     answers=[row["kpi"]],
                 )
                 for _, row in data.iterrows()
-                if row["split"] == "TRAIN"
+                if row["label"] == "TRAIN"
             ]
         else:
             self.rows = [
@@ -646,7 +646,7 @@ class lcm_pure(Dataset):
                     answers=[row["kpi"]],
                 )
                 for _, row in data.iterrows()
-                if row["split"] != "TRAIN"
+                if row["label"] != "TRAIN"
             ]
 
     def __len__(self):
