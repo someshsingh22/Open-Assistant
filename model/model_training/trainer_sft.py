@@ -38,6 +38,87 @@ from upload_to_s3 import upload
 assert os.getenv("HF_TOKEN"), "Please set your HF_TOKEN environment variable to your HuggingFace API token"
 login(token=os.getenv("HF_TOKEN"))
 
+import datasets
+import numpy as np
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+import evaluate
+_DESCRIPTION = """LOL"""
+_KWARGS_DESCRIPTION = """LOL2"""
+_CITATION = """LOL3"""
+vocab = {29900: 0,
+ 29896: 1,
+ 29906: 2,
+ 29941: 3,
+ 29946: 4,
+ 29945: 5,
+ 29953: 6,
+ 29955: 7,
+ 29947: 8,
+ 29889: '.',
+ 869: '0.'}
+
+def calculate_metrics_for_tensors(true_tensors, predicted_tensors, vocab):
+    """
+    Calculate RMSE, MAE, and R2 score between two lists of tensors representing numeric values.
+
+    Args:
+    true_tensors (list of tensors): List of tensors representing true values.
+    predicted_tensors (list of tensors): List of tensors representing predicted values.
+    vocab (dict): Vocabulary mapping tokens to their integer representations.
+
+    Returns:
+    tuple: (RMSE, MAE, R2 score)
+    """
+    def tensor_to_float(tensor, vocab):
+        num = ''.join([str(vocab.get(digit, '')) for digit in tensor])
+        if num.count('.')>1:
+            num = ''.join(num.split('.')[-2:])
+            num = float(num)
+        elif num.count('.')==0:
+            num = '0.'+num
+            num=float(num)
+        else:
+            num = float(num)
+        return num
+
+    true_values = [tensor_to_float(tensor, vocab) for tensor in true_tensors]
+    predicted_values = [tensor_to_float(tensor, vocab) for tensor in predicted_tensors]
+
+    # Calculate RMSE
+    rmse = np.sqrt(mean_squared_error(true_values, predicted_values))
+
+    # Calculate MAE
+    mae = mean_absolute_error(true_values, predicted_values)
+
+    # Calculate R2 score
+    r2 = r2_score(true_values, predicted_values)
+
+    return rmse, mae, r2
+
+@evaluate.utils.file_utils.add_start_docstrings(_DESCRIPTION, _KWARGS_DESCRIPTION)
+class LLM_NUM(evaluate.Metric):
+    def _info(self):
+        return evaluate.MetricInfo(
+            description=_DESCRIPTION,
+            citation=_CITATION,
+            inputs_description=_KWARGS_DESCRIPTION,
+            features=datasets.Features(
+                {
+                    "predictions": datasets.Sequence(datasets.Value("int32")),
+                    "references": datasets.Sequence(datasets.Value("int32")),
+                }
+            ),
+            reference_urls=["LOL4"],
+        )
+
+    def _compute(self, predictions, references):
+        rmse, mae, r2 = calculate_metrics_for_tensors(references, predictions, vocab)
+        return {
+            "rmse": float(rmse) if rmse.size == 1 else rmse,
+            "mae": float(mae) if mae.size == 1 else mae,
+            "r2": float(r2) if r2.size == 1 else r2,
+            }
 
 def compute_metrics(eval_pred, preprocess_fns, metrics):
     out = {}
