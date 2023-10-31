@@ -353,7 +353,11 @@ class LLM_NUM(evaluate.Metric):
         )
 
     def _compute(self, predictions, references):
-        rmse, mae, r2 = calculate_metrics_for_tensors(references, predictions, vocab)
+        try:
+            rmse, mae, r2 = calculate_metrics_for_tensors(references, predictions, vocab)
+        except:
+            print("Error in calculating metrics for tensors.", references, predictions)
+            raise ValueError
         return {
             "rmse": float(rmse) if rmse.size == 1 else rmse,
             "mae": float(mae) if mae.size == 1 else mae,
