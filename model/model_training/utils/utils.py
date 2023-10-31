@@ -355,6 +355,8 @@ class LLM_NUM(evaluate.Metric):
             mae, mse = calculate_metrics_for_tensors(references, predictions, vocab)
         except:
             print("Error in calculating metrics for tensors.", references, predictions)
+            print(len(predictions), len(references))
+            print(len(predictions[0]), len(references[0]))
             raise ValueError
         return {"mae": float(mae), "mse": float(mse)}
 
