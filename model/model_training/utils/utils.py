@@ -322,19 +322,17 @@ def calculate_metrics_for_tensors(true_tensors, predicted_tensors, vocab):
             num = float(num)
         return num
 
-    true_values = [tensor_to_float(tensor, vocab) for tensor in true_tensors]
-    predicted_values = [tensor_to_float(tensor, vocab) for tensor in predicted_tensors]
+    true_values = tensor_to_float(true_tensors, vocab)
+    predicted_values = tensor_to_float(predicted_tensors, vocab)
 
     # Calculate RMSE
-    rmse = np.sqrt(mean_squared_error(true_values, predicted_values))
+    mse = (true_values - predicted_values) ** 2
 
     # Calculate MAE
-    mae = mean_absolute_error(true_values, predicted_values)
+    mae = (true_values - predicted_values)
+    mae = np.abs(mae)
 
-    # Calculate R2 score
-    r2 = r2_score(true_values, predicted_values)
-
-    return rmse, mae, r2
+    return mae, mse
 
 @evaluate.utils.file_utils.add_start_docstrings(_DESCRIPTION, _KWARGS_DESCRIPTION)
 class LLM_NUM(evaluate.Metric):
@@ -345,8 +343,8 @@ class LLM_NUM(evaluate.Metric):
             inputs_description=_KWARGS_DESCRIPTION,
             features=datasets.Features(
                 {
-                    "predictions": datasets.Sequence(datasets.Value("int32")),
-                    "references": datasets.Sequence(datasets.Value("int32")),
+                    "predictions": datasets.Value("int32"),
+                    "references": datasets.Value("int32"),
                 }
             ),
             reference_urls=["LOL4"],
@@ -354,15 +352,11 @@ class LLM_NUM(evaluate.Metric):
 
     def _compute(self, predictions, references):
         try:
-            rmse, mae, r2 = calculate_metrics_for_tensors(references, predictions, vocab)
+            mae, mse = calculate_metrics_for_tensors(references, predictions, vocab)
         except:
             print("Error in calculating metrics for tensors.", references, predictions)
             raise ValueError
-        return {
-            "rmse": float(rmse) if rmse.size == 1 else rmse,
-            "mae": float(mae) if mae.size == 1 else mae,
-            "r2": float(r2) if r2.size == 1 else r2,
-            }
+        return {"mae": float(mae), "mse": float(mse)}
 
 def get_metrics(conf, tokenizer):
     # the reason behind using a list is that we might want to extend the list of our
