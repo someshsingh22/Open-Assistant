@@ -363,7 +363,7 @@ class LLM_NUM(evaluate.Metric):
 def get_metrics(conf, tokenizer):
     # the reason behind using a list is that we might want to extend the list of our
     # metrics in the future for more thorough evaluation
-    metrics, preprocess_fns = [evaluate.load("accuracy"), LLM_NUM], [default_preprocess, default_preprocess]
+    metrics, preprocess_fns = [evaluate.load("accuracy"), LLM_NUM()], [default_preprocess, default_preprocess]
 
     # if any(dataset in QA_DATASETS for dataset in conf.datasets):
     #     raise ValueError("TODO")
