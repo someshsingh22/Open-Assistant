@@ -922,16 +922,16 @@ llama2_13b_orcacode2_8k:
 
 vicuna_emotion:
   project_name: Emotion
-  run_name: vicuna1_5_emotion_blip_llava
+  run_name: vicuna1_5_13B_emotion_blip_llava
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true
   sort_by_length: false
   dtype: bf16
-  log_dir: "/mnt/localssd/vicuna1_5_7b_sft"
-  output_dir: /mnt/localssd/vicuna1_5_7b_sft
-  learning_rate: 3e-4
-  model_name: lmsys/vicuna-7b-v1.5
+  log_dir: "/mnt/localssd/vicuna1_5_13b_sft"
+  output_dir: /mnt/localssd/vicuna1_5_13b_sft
+  learning_rate: 1e-4
+  model_name: lmsys/vicuna-13b-v1.5
   deepspeed_config: configs/zero3_config_sft.json
   weight_decay: 1e-6
   max_length: 1500
@@ -940,11 +940,11 @@ vicuna_emotion:
   use_flash_attention: true
   gradient_checkpointing: true
   gradient_accumulation_steps: 1
-  per_device_train_batch_size: 32
-  per_device_eval_batch_size: 32
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 16
   residual_dropout: 0.2
   eval_steps: 75
-  save_steps: 300
+  save_steps: 900
   num_train_epochs: 1
   save_total_limit: 3
   logging_steps: 15
