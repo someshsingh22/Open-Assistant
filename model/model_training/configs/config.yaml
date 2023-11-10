@@ -920,7 +920,7 @@ llama2_13b_orcacode2_8k:
   #   megacode:                 1000
   #   evol_instruct_code:        455
 
-zephyr_emotion:
+vicuna_emotion:
   project_name: Emotion
   run_name: vicuna1_5_emotion_blip_llava
   rng_seed: 0xe1291f21
