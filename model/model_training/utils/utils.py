@@ -409,6 +409,7 @@ def get_model(conf, tokenizer, pad_vocab_size_to_multiple_of=16, check_freeze_la
                 seq2seqmodel=conf.seq2seqmodel,
                 without_head=conf.is_reward_model,
                 torch_dtype=dtype,
+                use_flash_attention_2=True,
             )
 
         n_embs = model.get_input_embeddings().num_embeddings
