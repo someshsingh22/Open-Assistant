@@ -188,6 +188,7 @@ TOKENIZER_CONFIGS = {
         special_tokens=SpecialTokens("<|endoftext|>", "<|endoftext|>", sep_token="<|endoftext|>")
     ),
     "LLongMA": TokenizerConfig(special_tokens=SpecialTokens("</s>", "</s>", sep_token="<s>")),
+    "vicuna": TokenizerConfig(special_tokens=SpecialTokens("</s>", "</s>", sep_token="<s>")),
 }
 
 

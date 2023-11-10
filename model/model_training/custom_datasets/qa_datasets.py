@@ -610,7 +610,7 @@ class emotion(Dataset):
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,
-                questions=[row["instruction"]],
+                questions=[row["instruction"]].replace('[INST]','').replace('[/INST]',''),
                 answers=[row["combined"]],
             )
             for _, row in data.iterrows()
