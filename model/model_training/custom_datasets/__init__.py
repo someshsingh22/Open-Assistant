@@ -28,8 +28,7 @@ from model_training.custom_datasets.qa_datasets import (
     Vicuna,
     WebGPT,
     WizardEvolInstructV2,
-    lcm_agg,
-    lcm_pure,
+    emotion,
     load_alpaca_dataset,
 )
 from model_training.custom_datasets.rank_datasets import AugmentedOA
@@ -193,11 +192,8 @@ def get_one_dataset(
         dataset = DolphinMix(cache_dir=data_path, **kwargs)
     elif dataset_name in RAG_DATASETS.keys():
         dataset = RAGDataset(dataset_name, cache_dir=data_path, **kwargs)
-    elif dataset_name == "lcm_agg":
-        dataset = lcm_agg(cache_dir=data_path, **kwargs)
-    elif dataset_name == "lcm_pure":
-        train = lcm_pure(cache_dir=data_path, train=True, **kwargs)
-        eval = lcm_pure(cache_dir=data_path, train=False, **kwargs)
+    elif dataset_name == "emotion":
+        dataset = emotion(cache_dir=data_path, **kwargs)
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
 
