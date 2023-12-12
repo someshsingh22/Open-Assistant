@@ -721,40 +721,21 @@ class GPTeacher_Roleplay(Dataset):
         return dialogue
 
 class sharingan_pft(Dataset):
-    def __init__(self, cache_dir, mode="sft", train=True):
+    def __init__(self, cache_dir, mode="sft", train=True, pft=True):
         super().__init__()
         self.rows = []
         self.mode = mode
-        if train:
-            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_train_ads.csv")
+        if pft:
+            if train:
+                data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_train_ads.csv")
+            else:
+                data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_test_ads.csv")
         else:
-            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_test_ads.csv")
+            if train:
+                data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/hq_train.csv")
+            else:
+                data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/hq_test.csv")
 
-        self.rows = [
-            create_dataset_entry_qa(
-                mode=self.mode,
-                questions=[row["prompt"]],
-                answers=[row["asr"]],
-            )
-            for _, row in data.iterrows()
-        ]
-
-    def __len__(self):
-        return len(self.rows)
-
-    def __getitem__(self, index):
-        return self.rows[index]
-    
-class sharingan_ilql(Dataset):
-    def __init__(self, cache_dir, mode="sft"):
-        super().__init__()
-        self.rows = []
-        self.mode = mode
-        if train:
-            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_train.csv")
-        else:
-            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_test_.csv")
-        
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,

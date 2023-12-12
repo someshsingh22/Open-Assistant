@@ -949,6 +949,40 @@ sharingan_pft:
   save_total_limit: 3
   logging_steps: 5
   datasets:
-    - adspft:
+    - sharingan_pft:
+        val_split: 0.05
+        max_val_set: 150
+
+
+sharingan_hq:
+  project_name: SharinganHQ
+  run_name: vicuna1_5_13B_SharinganHQ
+  rng_seed: 0xe1291f21
+  random_offset_probability: 0.0
+  use_custom_sampler: true
+  sort_by_length: false
+  dtype: bf16
+  log_dir: "/mnt/localssd/vicuna1_5_13b_sft"
+  output_dir: /mnt/localssd/vicuna1_5_13b_sft
+  learning_rate: 1e-4
+  model_name: lmsys/vicuna-13b-v1.5
+  deepspeed_config: configs/zero3_config_sft.json
+  weight_decay: 1e-6
+  max_length: 4000
+  warmup_steps: 50
+  peft_model: false
+  use_flash_attention: true
+  gradient_checkpointing: true
+  gradient_accumulation_steps: 1
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 8
+  residual_dropout: 0.2
+  eval_steps: 30
+  save_steps: 40
+  num_train_epochs: 1
+  save_total_limit: 3
+  logging_steps: 5
+  datasets:
+    - sharingan_hq:
         val_split: 0.05
         max_val_set: 150
