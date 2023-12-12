@@ -29,7 +29,6 @@ from model_training.custom_datasets.qa_datasets import (
     WebGPT,
     WizardEvolInstructV2,
     sharingan_pft,
-    sharingan_ilql,
     load_alpaca_dataset,
 )
 from model_training.custom_datasets.rank_datasets import AugmentedOA
@@ -197,8 +196,8 @@ def get_one_dataset(
         train = sharingan_pft(cache_dir=data_path, train=True, pft=True, **kwargs)
         eval = sharingan_pft(cache_dir=data_path, train=False, pft=True, **kwargs)
     elif dataset_name == "sharingan_hq":
-        train = sharingan_ilql(cache_dir=data_path, train=True, pft=False, **kwargs)
-        eval = sharingan_ilql(cache_dir=data_path, train=False, pft=False, **kwargs)
+        train = sharingan_pft(cache_dir=data_path, train=True, pft=False, **kwargs)
+        eval = sharingan_pft(cache_dir=data_path, train=False, pft=False, **kwargs)
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
 
