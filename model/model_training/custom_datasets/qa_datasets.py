@@ -721,13 +721,15 @@ class GPTeacher_Roleplay(Dataset):
         return dialogue
 
 class sharingan_pft(Dataset):
-    def __init__(self, cache_dir, mode="sft"):
+    def __init__(self, cache_dir, mode="sft", train=True):
         super().__init__()
         self.rows = []
         self.mode = mode
-        train_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_train_ads.csv")
-        test_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_test_ads.csv")
-        data = pd.concat([train_data, test_data])
+        if train:
+            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_train_ads.csv")
+        else:
+            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_test_ads.csv")
+
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,
@@ -748,9 +750,11 @@ class sharingan_ilql(Dataset):
         super().__init__()
         self.rows = []
         self.mode = mode
-        train_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_train.csv")
-        test_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_test_.csv")
-        data = pd.concat([train_data, test_data])
+        if train:
+            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_train.csv")
+        else:
+            data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_test_.csv")
+        
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,

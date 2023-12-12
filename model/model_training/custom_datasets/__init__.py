@@ -194,7 +194,8 @@ def get_one_dataset(
     elif dataset_name in RAG_DATASETS.keys():
         dataset = RAGDataset(dataset_name, cache_dir=data_path, **kwargs)
     elif dataset_name == "sharingan_pft":
-        dataset = sharingan_pft(cache_dir=data_path, **kwargs)
+        train = sharingan_pft(cache_dir=data_path, train=True, **kwargs)
+        eval = sharingan_pft(cache_dir=data_path, train=False, **kwargs)
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
 
