@@ -921,8 +921,8 @@ llama2_13b_orcacode2_8k:
   #   evol_instruct_code:        455
 
 sharingan_pft:
-  project_name: SharinganPFT
-  run_name: vicuna1_5_13B_SharinganPFT
+  project_name: Sharingan
+  run_name: vicuna1_5_13B_SharinganPFT_3ep
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true
@@ -945,8 +945,8 @@ sharingan_pft:
   residual_dropout: 0.2
   eval_steps: 5
   save_steps: 10
-  num_train_epochs: 1
-  save_total_limit: 3
+  num_train_epochs: 3
+  save_total_limit: 10
   logging_steps: 1
   datasets:
     - sharingan_pft:
@@ -955,8 +955,8 @@ sharingan_pft:
 
 
 sharingan_hq:
-  project_name: SharinganHQ
-  run_name: vicuna1_5_13B_SharinganHQ
+  project_name: Sharingan
+  run_name: vicuna1_5_13B_SharinganHQ_3ep
   rng_seed: 0xe1291f21
   random_offset_probability: 0.0
   use_custom_sampler: true
@@ -979,7 +979,7 @@ sharingan_hq:
   residual_dropout: 0.2
   eval_steps: 5
   save_steps: 10
-  num_train_epochs: 1
+  num_train_epochs: 3
   save_total_limit: 3
   logging_steps: 1
   datasets:
