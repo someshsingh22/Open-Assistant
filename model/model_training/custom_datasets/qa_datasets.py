@@ -601,27 +601,6 @@ class DatabricksDolly15k(Dataset):
         return dialogue
 
 
-class emotion(Dataset):
-    def __init__(self, cache_dir, mode="sft"):
-        super().__init__()
-        self.rows = []
-        self.mode = mode
-        data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/Emotions_title_comments_data.csv")
-        self.rows = [
-            create_dataset_entry_qa(
-                mode=self.mode,
-                questions=[row["instruction"].replace('[INST]','').replace('[/INST]','')],
-                answers=[row["combined"]],
-            )
-            for _, row in data.iterrows()
-        ]
-
-    def __len__(self):
-        return len(self.rows)
-
-    def __getitem__(self, index):
-        return self.rows[index]
-
 class Dolly15kMultilingual(Dataset):
     def __init__(self, cache_dir: str | Path, mode: str = "sft") -> None:
         super().__init__()
@@ -740,3 +719,49 @@ class GPTeacher_Roleplay(Dataset):
     def __getitem__(self, index: int) -> DatasetEntry:
         dialogue = self.rows[index]
         return dialogue
+
+class sharingan_pft(Dataset):
+    def __init__(self, cache_dir, mode="sft"):
+        super().__init__()
+        self.rows = []
+        self.mode = mode
+        train_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_train_ads.csv")
+        test_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/pft_test_ads.csv")
+        data = pd.concat([train_data, test_data])
+        self.rows = [
+            create_dataset_entry_qa(
+                mode=self.mode,
+                questions=[row["prompt"]],
+                answers=[row["asr"]],
+            )
+            for _, row in data.iterrows()
+        ]
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, index):
+        return self.rows[index]
+    
+class sharingan_ilql(Dataset):
+    def __init__(self, cache_dir, mode="sft"):
+        super().__init__()
+        self.rows = []
+        self.mode = mode
+        train_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_train.csv")
+        test_data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/sharingan_test_.csv")
+        data = pd.concat([train_data, test_data])
+        self.rows = [
+            create_dataset_entry_qa(
+                mode=self.mode,
+                questions=[row["prompt"]],
+                answers=[row["asr"]],
+            )
+            for _, row in data.iterrows()
+        ]
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, index):
+        return self.rows[index]
