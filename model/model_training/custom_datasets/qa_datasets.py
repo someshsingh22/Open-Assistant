@@ -606,11 +606,11 @@ class emotion(Dataset):
         super().__init__()
         self.rows = []
         self.mode = mode
-        data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/rpics_emotion_verb_joined_141k.csv")
+        data = pd.read_csv("/mnt/localssd/Open-Assistant/model/model_training/rpics_emotion_verb_400k.csv")
         self.rows = [
             create_dataset_entry_qa(
                 mode=self.mode,
-                questions=[row["instruction"].replace('[INST]','').replace('[/INST]','')],
+                questions=[row["final_instr"].replace('[INST]','').replace('[/INST]','')],
                 answers=[row["combined"]],
             )
             for _, row in data.iterrows()
