@@ -928,14 +928,14 @@ vicuna_emotion_verb:
   use_custom_sampler: true
   sort_by_length: false
   dtype: bf16
-  log_dir: "/mnt/localssd/vicuna1_5_13b_sft"
-  output_dir: /mnt/localssd/vicuna1_5_13b_sft
+  log_dir: "/mnt/localssd/vicuna1_5_13b_sft_verb"
+  output_dir: /mnt/localssd/vicuna1_5_13b_sft_verb
   learning_rate: 1e-4
   model_name: lmsys/vicuna-13b-v1.5
   deepspeed_config: configs/zero3_config_sft.json
   weight_decay: 1e-6
-  max_length: 1000
-  warmup_steps: 50
+  max_length: 1500
+  warmup_steps: 250
   peft_model: false
   use_flash_attention: true
   gradient_checkpointing: true
@@ -943,11 +943,11 @@ vicuna_emotion_verb:
   per_device_train_batch_size: 16
   per_device_eval_batch_size: 16
   residual_dropout: 0.2
-  eval_steps: 25
-  save_steps: 300
-  num_train_epochs: 1
-  save_total_limit: 3
-  logging_steps: 5
+  eval_steps: 50
+  save_steps: 800
+  num_train_epochs: 2
+  save_total_limit: 5
+  logging_steps: 10
   datasets:
     - emotion:
         val_split: 0.05
